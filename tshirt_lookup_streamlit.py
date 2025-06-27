@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # 비밀번호 설정
-PASSWORD = "1234"  # 원하는 비밀번호로 바꿔주세요
+PASSWORD = "0710"  # 원하는 비밀번호로 바꿔주세요
 
 # 엑셀 파일 경로
 EXCEL_FILE = "data/tshirt_info_2025.xlsx"
