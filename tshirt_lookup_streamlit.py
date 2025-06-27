@@ -22,7 +22,7 @@ def load_data():
 df = load_data()
 
 # 이름 검색창
-name_input = st.text_input("🔍 이름을 입력하세요 (예: 이다솜(39))")
+name_input = st.text_input("🔍 이름을 입력하세요 (예: 이다솜)")
 
 if name_input:
     result = df[df["이름"].str.contains(name_input.strip())]
