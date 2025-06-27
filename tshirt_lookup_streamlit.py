@@ -14,7 +14,7 @@ if password != "0710":
 # 데이터 불러오기
 @st.cache_data
 def load_data():
-    df = pd.read_excel("tshirt_info_2025.xlsx")
+    df = pd.read_excel("data/tshirt_info_2025.xlsx")
     df = df[["이름", "티셔츠 사이즈", "참석여부"]]
     df.columns = ["이름", "사이즈", "참석 정보"]
     return df
