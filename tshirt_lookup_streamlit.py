@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # 🔐 4자리 비밀번호 설정
-CORRECT_PASSWORD = "4268"
+CORRECT_PASSWORD = "0710"
 
 # 타이틀
 st.title("🧾 수련회 티셔츠 & 참석 정보 조회")
