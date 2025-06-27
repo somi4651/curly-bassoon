@@ -14,7 +14,7 @@ if password != "0710":
 # 데이터 불러오기
 @st.cache_data
 def load_data():
-    df = pd.read_excel("data/tshirt_info_2025.xlsx")
+    df = pd.read_excel("data/tshirt_info_2025.xlsx")  # data 폴더 안에 있는 파일 경로
     df = df[["이름", "티셔츠 사이즈", "참석여부"]]
     df.columns = ["이름", "사이즈", "참석 정보"]
     return df
@@ -25,7 +25,7 @@ df = load_data()
 name_input = st.text_input("🔍 이름을 입력하세요 (예: 이다솜)")
 
 if name_input:
-    result = df[df["이름"].str.contains(name_input.strip())]
+    result = df[df["이름"].astype(str).str.contains(name_input.strip(), na=False)]
 
     if not result.empty:
         st.success(f"🔍 {len(result)}건의 결과가 검색되었습니다.")
