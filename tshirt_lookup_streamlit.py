@@ -1,13 +1,17 @@
-# tshirt_lookup_streamlit.py
 import streamlit as st
 import pandas as pd
 
 st.title("🧾 수련회 티셔츠 & 참석 정보 조회")
 
-# 깃허브에 업로드한 엑셀 파일 직접 불러오기
-url = "https://raw.githubusercontent.com/somi4651/curly-bassoon/main/data/%EC%88%98%EB%A0%A8%ED%9A%8C%20%ED%8B%B0%EC%85%94%EC%B8%A0%20%EC%82%AC%EC%9D%B4%EC%A6%88%ED%91%9C%202025%20%EC%97%AC%EB%A6%84.xlsx"
-df = pd.read_excel(url)
-df.columns = df.columns.str.strip()
+# 🔽 GitHub에 업로드된 파일을 앱 내부에서 직접 읽기
+EXCEL_FILE = "data/수련회 티셔츠 사이즈표 2025 여름.xlsx"
+
+@st.cache_data
+def load_data():
+    df = pd.read_excel(EXCEL_FILE)
+    df.columns = df.columns.str.strip()
+    df['참석 정보'] = df.apply(make_attendance_text, axis=1)
+    return df
 
 def make_attendance_text(row):
     base = str(row.get('참석여부', '')).strip()
@@ -17,7 +21,7 @@ def make_attendance_text(row):
     else:
         return base
 
-df['참석 정보'] = df.apply(make_attendance_text, axis=1)
+df = load_data()
 
 name_query = st.text_input("🔍 이름을 입력하세요 (예: 이다솜(39))")
 
