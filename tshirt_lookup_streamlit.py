@@ -1,38 +1,45 @@
 import streamlit as st
 import pandas as pd
 
-# 앱 제목
-st.set_page_config(page_title="수련회 티셔츠 & 참석 정보 조회", layout="centered")
-st.markdown("## 🧾 수련회 티셔츠 & 참석 정보 조회")
+# 비밀번호 설정
+PASSWORD = "1234"  # 원하는 비밀번호로 바꿔주세요
 
-# 비밀번호 입력
-password = st.text_input("🔐 비밀번호 4자리를 입력하세요", type="password")
-if password != "0710":
-    st.warning("비밀번호가 올바르지 않습니다.")
-    st.stop()
+# 엑셀 파일 경로
+EXCEL_FILE = "data/tshirt_info_2025.xlsx"
 
-# 데이터 불러오기
-@st.cache_data
+# 데이터 불러오기 @st.cache_data로 캐싱
 def load_data():
-    df = pd.read_excel("data/tshirt_info_2025.xlsx")  # data 폴더 안에 있는 파일 경로
-    df = df[["이름", "티셔츠 사이즈", "참석여부"]]
-    df.columns = ["이름", "사이즈", "참석 정보"]
+    df = pd.read_excel(EXCEL_FILE)
     return df
 
-df = load_data()
+# 앱 제목
+st.title("수련회 티셔츠 & 참석 정보 조회")
 
-# 이름 검색창
-name_input = st.text_input("🔍 이름을 입력하세요 (예: 이다솜)")
+# 비밀번호 입력
+password_input = st.text_input("\U0001F511 비밀번호 4자리를 입력하세요", type="password")
 
-if name_input:
-    result = df[df["이름"].astype(str).str.contains(name_input.strip(), na=False)]
+if password_input == PASSWORD:
+    df = load_data()
 
-    if not result.empty:
-        st.success(f"🔍 {len(result)}건의 결과가 검색되었습니다.")
-        st.dataframe(result.reset_index(drop=True), use_container_width=True)
-    else:
-        st.error("일치하는 결과가 없습니다. 철자나 괄호 포함 여부를 다시 확인해주세요.")
+    # 이름 입력
+    name_input = st.text_input("\U0001F464 이름을 입력하세요 (예: 이다솜)")
 
-# 안내 메시지
-st.markdown("---")
-st.info("📌 개인정보 보호를 위해 본인 신청 확인 용도로만 사용 부탁드립니다.")
+    if name_input:
+        try:
+            # '이름' 열만 남기고 숫자 열 제거 (이름 포함된 셀만 필터링)
+            if "이름" not in df.columns:
+                st.error("엑셀 파일에 '이름'이라는 열이 존재하지 않습니다.")
+            else:
+                # 이름 포함된 행 추출 (띄어쓰기 제거하고 비교)
+                filtered_df = df[df["이름"].astype(str).str.contains(name_input.strip())]
+
+                if filtered_df.empty:
+                    st.warning(f"'{name_input}'에 해당하는 정보를 찾을 수 없습니다.")
+                else:
+                    st.success(f"'{name_input}'에 대한 조회 결과입니다.")
+                    st.dataframe(filtered_df)
+        except Exception as e:
+            st.error(f"에러가 발생했습니다: {e}")
+else:
+    if password_input != "":
+        st.error("비밀번호가 틀렸습니다.")
