@@ -19,7 +19,7 @@ if uploaded_file:
 
     df['참석 정보'] = df.apply(make_attendance_text, axis=1)
 
-    name_query = st.text_input("🔍 이름을 입력하세요 (예: 김진영(44))")
+    name_query = st.text_input("🔍 이름을 입력하세요 (예: 이다솜(39))")
 
     if name_query:
         result = df[df['이름'].str.contains(name_query, na=False)]
