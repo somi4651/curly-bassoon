@@ -13,7 +13,7 @@ def load_data():
     return df
 
 # 앱 제목
-st.title("수련회 티셔츠 & 참석 정보 조회")
+st.title("수련회 티셔츠 & 신청 정보 조회")
 
 # 비밀번호 입력
 password_input = st.text_input("\U0001F511 비밀번호 4자리를 입력하세요", type="password")
