@@ -1,25 +1,18 @@
+# tshirt_lookup_streamlit.py
 import streamlit as st
 import pandas as pd
 
 st.title("🧾 수련회 티셔츠 & 참석 정보 조회")
 
-# 고정된 엑셀 파일을 GitHub에 저장해두고 경로를 지정
-EXCEL_FILE_URL = "https://raw.githubusercontent.com/somi4651/curly-bassoon/main/data.xlsx"  # 예시 경로
+EXCEL_FILE_URL = "https://raw.githubusercontent.com/somi4651/curly-bassoon/main/data/수련회%20티셔츠%20사이즈표%202025%20여름.xlsx"
 
 @st.cache_data
 def load_data():
     df = pd.read_excel(EXCEL_FILE_URL)
     df.columns = df.columns.str.strip()
-
-    def make_attendance_text(row):
-        base = str(row.get('참석여부', '')).strip()
-        detail = str(row.get('상세 참석여부', '')).strip()
-        if base == '부분참' and detail and detail.lower() != 'nan':
-            return f"{base} ({detail})"
-        else:
-            return base
-
-    df['참석 정보'] = df.apply(make_attendance_text, axis=1)
+    df['참석 정보'] = df.apply(lambda row: (
+        f"{row['참석여부']} ({row['상세 참석여부']})" if str(row['참석여부']).strip() == '부분참' and str(row['상세 참석여부']).strip().lower() != 'nan' else row['참석여부']
+    ), axis=1)
     return df
 
 df = load_data()
