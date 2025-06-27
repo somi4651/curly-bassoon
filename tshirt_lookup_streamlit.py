@@ -29,7 +29,8 @@ if name_input:
 
     if not result.empty:
         st.success(f"🔍 {len(result)}건의 결과가 검색되었습니다.")
-        st.dataframe(result.reset_index(drop=True), use_container_width=True)
+        # ✅ 인덱스 없이, 테이블형식으로 깔끔하게 출력
+        st.table(result)
     else:
         st.error("일치하는 결과가 없습니다. 철자나 괄호 포함 여부를 다시 확인해주세요.")
 
